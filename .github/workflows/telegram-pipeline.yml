@@ -1,0 +1,40 @@
+name: Telegram Career Ops Pipeline
+
+on:
+  repository_dispatch:
+    types: [telegram-jd]
+  workflow_dispatch:
+    inputs:
+      jd_text:
+        description: 'Job Description Text or URL'
+        required: true
+      chat_id:
+        description: 'Telegram Chat ID (optional override)'
+        required: false
+
+jobs:
+  process-jd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
+
+      - name: Execute Telegram Pipeline
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ github.event.client_payload.chat_id || inputs.chat_id || secrets.TELEGRAM_CHAT_ID }}
+          JD_INPUT: ${{ github.event.client_payload.jd_text || inputs.jd_text }}
+        run: |
+          node scripts/telegram-pipeline.mjs
