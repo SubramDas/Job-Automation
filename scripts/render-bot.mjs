@@ -143,7 +143,7 @@ async function resolveJdText(input) {
 // ---------------------------------------------------------------------------
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({
-  model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+  model: process.env.GEMINI_MODEL || 'gemini-3.5-flash-lite',
   generationConfig: { responseMimeType: 'application/json' },
 });
 
