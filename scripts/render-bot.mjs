@@ -275,12 +275,12 @@ Return strict JSON:
 // PDF Generation
 // ---------------------------------------------------------------------------
 function compilePdf(cvPayload) {
-  const payloadPath = '/tmp/cv-payload.json';
-  const htmlPath = '/tmp/cv.html';
   const outputDir = join(ROOT, 'output');
   if (!existsSync(outputDir)) {
     mkdirSync(outputDir, { recursive: true });
   }
+  const payloadPath = join(outputDir, 'cv-payload.json');
+  const htmlPath = join(outputDir, 'cv.html');
   const pdfPath = join(outputDir, 'resume.pdf');
 
   writeFileSync(payloadPath, JSON.stringify(cvPayload, null, 2));

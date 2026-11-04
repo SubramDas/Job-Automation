@@ -245,12 +245,12 @@ JSON OUTPUT STRUCTURE:
     console.log(`Evaluated: ${data.role} @ ${data.company} (Score: ${data.score})`);
 
     // Prepare temp payload file
-    const payloadPath = '/tmp/cv-payload.json';
-    const htmlPath = '/tmp/cv.html';
     const outputDir = join(ROOT, 'output');
     if (!existsSync(outputDir)) {
       mkdirSync(outputDir, { recursive: true });
     }
+    const payloadPath = join(outputDir, 'cv-payload.json');
+    const htmlPath = join(outputDir, 'cv.html');
     const pdfPath = join(outputDir, 'resume.pdf');
 
     writeFileSync(payloadPath, JSON.stringify(data.cv_payload, null, 2));
