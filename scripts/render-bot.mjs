@@ -11,6 +11,11 @@
  *   2. User replies with extra experience -> Bot updates CV, recalculates score, and sends PDF.
  */
 
+import dns from 'node:dns';
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first');
+}
+
 import http from 'http';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
@@ -94,22 +99,34 @@ async function sendTelegramDocument(chatId, filePath, caption = '') {
   const fileBuffer = readFileSync(filePath);
   const blob = new Blob([fileBuffer], { type: 'application/pdf' });
 
-  const formData = new FormData();
-  formData.append('chat_id', chatId);
-  formData.append('document', blob, 'resume.pdf');
-  if (caption) {
-    formData.append('caption', caption);
+  let lastErr = null;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const formData = new FormData();
+      formData.append('chat_id', chatId);
+      formData.append('document', blob, 'resume.pdf');
+      if (caption) {
+        formData.append('caption', caption);
+      }
+
+      const res = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(`Telegram API error: ${err}`);
+      }
+      return; // Success
+    } catch (err) {
+      lastErr = err;
+      console.warn(`sendTelegramDocument attempt ${attempt} failed: ${err.message}. Retrying in 2s...`);
+      await new Promise(r => setTimeout(r, 2000));
+    }
   }
 
-  const res = await fetch(url, {
-    method: 'POST',
-    body: formData,
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Failed to send document: ${err}`);
-  }
+  throw new Error(`Failed to send document after 3 attempts: ${lastErr?.message}`);
 }
 
 // ---------------------------------------------------------------------------

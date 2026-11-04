@@ -17,4 +17,4 @@ COPY . .
 # Render binds to PORT (default 10000)
 EXPOSE 10000
 
-CMD ["node", "scripts/render-bot.mjs"]
+CMD ["node", "--dns-result-order=ipv4first", "scripts/render-bot.mjs"]
