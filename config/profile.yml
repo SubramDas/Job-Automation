@@ -1,0 +1,49 @@
+# Personalized from confirmed resume and user preferences, 2026-10-21.
+candidate:
+  full_name: Subram Das
+  email: subram.iitb@gmail.com
+  phone: +91-9365041445
+  location: Pune, India
+  linkedin: https://linkedin.com/in/subramdas
+  github: https://github.com/SubramDas
+target_roles:
+  primary:
+    - AI Engineer
+    - Software Engineer
+    - Machine Learning Engineer
+  archetypes:
+    - name: AI / GenAI Engineer
+      fit: primary
+    - name: Software Engineer
+      fit: primary
+    - name: Machine Learning Engineer
+      fit: primary
+narrative:
+  headline: Software/AI Engineer with systems, IPC, and LLM/GenAI experience
+  superpowers:
+    - C-based SOME/IP and AUTOSAR Service Discovery
+    - Embedded Linux & hardware bring-up cross-compilation
+    - Rust code generation and FIDL parsing
+    - RAG pipelines and AI-assisted Jira-to-code workflows
+    - ML model integration and performance testing
+compensation:
+  target_range: INR 30-50 LPA (INR 3,000,000-5,000,000 annually)
+  currency: INR
+  location_flexibility: Bengaluru, Pune, Hyderabad, or Remote
+location:
+  country: India
+  city: Pune
+  timezone: Asia/Kolkata
+  preferred_locations:
+    - Bengaluru
+    - Pune
+    - Hyderabad
+    - Remote
+language:
+  output: en
+spend_tier: standard
+page_format: a4
+cv:
+  output_format: html
+scan:
+  extractor: cli
